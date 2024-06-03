@@ -1,6 +1,8 @@
 package com.edsoncosta.WinLink.generics;
 
 import com.edsoncosta.WinLink.enums.Status;
+import com.edsoncosta.WinLink.organizer.dto.OrganizerRequest;
+import com.edsoncosta.WinLink.organizer.dto.OrganizerResponse;
 import com.edsoncosta.WinLink.utils.exception.generic.GenericException;
 import jakarta.transaction.Transactional;
 import org.springframework.dao.DuplicateKeyException;
@@ -10,6 +12,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
+/******************************
+ * Created by: Edson Costa
+ * Date: 02/05/2024
+ * Time: 23:56 PM
+ ******************************/
 
 public abstract class AbstractServiceImpl<E,ID,RESPONSE_DTO> implements AbstractService<E,ID,RESPONSE_DTO> {
 
@@ -33,8 +41,8 @@ public abstract class AbstractServiceImpl<E,ID,RESPONSE_DTO> implements Abstract
 
     @Transactional
     public RESPONSE_DTO save(E entity){
-        if (entity instanceof GenericEntity) {
-            GenericEntity genericEntity = (GenericEntity) entity;
+        if (entity instanceof GenericId) {
+            GenericId genericEntity = (GenericId) entity;
             if (genericEntity.getId() == null) {
                 genericEntity.setId(UUID.randomUUID());
                 genericEntity.setCreatedAt(LocalDateTime.now());
@@ -49,7 +57,7 @@ public abstract class AbstractServiceImpl<E,ID,RESPONSE_DTO> implements Abstract
         } catch (DuplicateKeyException e) {
             throw new GenericException("Campo duplicado!"+e);
         } catch (Exception e) {
-            throw new GenericException("Erro ao salvar a entidade!"+e);
+            throw new GenericException("Erro ao salvar o registro!"+e);
         }
     }
 
@@ -60,12 +68,12 @@ public abstract class AbstractServiceImpl<E,ID,RESPONSE_DTO> implements Abstract
                 E updatedEntity = this.repository.save(entity);
                 return mapToResponse(updatedEntity);
             } else {
-                throw new GenericException("Entidade não encontrada para o ID: ");
+                throw new GenericException("Registro não encontrado!");
             }
         } catch (DuplicateKeyException e) {
             throw new GenericException("Campo duplicado!");
         } catch (Exception e) {
-            throw new GenericException("Erro ao actualizar a entidade!");
+            throw new GenericException("Erro ao actualizar o registro!");
         }
     }
 
@@ -80,8 +88,10 @@ public abstract class AbstractServiceImpl<E,ID,RESPONSE_DTO> implements Abstract
             }
 
         }catch(Exception ex){
-            throw new GenericException("Erro ao deletar a entidade!"+ex);
+            throw new GenericException("Erro ao excluir o registro!"+ex);
         }
     }
 
+    @Transactional
+    public abstract OrganizerResponse save(OrganizerRequest organizer);
 }

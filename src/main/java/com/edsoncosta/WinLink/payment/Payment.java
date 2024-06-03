@@ -1,6 +1,6 @@
 package com.edsoncosta.WinLink.payment;
 
-import com.edsoncosta.WinLink.generics.GenericEntity;
+import com.edsoncosta.WinLink.generics.GenericId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -9,7 +9,7 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Payment extends GenericEntity {
+public class Payment extends GenericId {
 
     private double value;
 

@@ -1,6 +1,6 @@
 package com.edsoncosta.WinLink.link;
 
-import com.edsoncosta.WinLink.generics.GenericEntity;
+import com.edsoncosta.WinLink.generics.GenericId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -10,10 +10,9 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
-public class Link extends GenericEntity {
+public class Link extends GenericId {
 
     private String url;
-
     @Enumerated(EnumType.STRING)
     private LinkType linkType;
 

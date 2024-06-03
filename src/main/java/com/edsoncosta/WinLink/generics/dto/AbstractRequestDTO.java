@@ -7,6 +7,7 @@ package com.edsoncosta.WinLink.generics.dto;
  * Time: 15:44
  ******************************/
 
+
 public abstract class AbstractRequestDTO<E>{
     public abstract E mapToEntity();
 }

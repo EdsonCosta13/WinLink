@@ -1,18 +1,21 @@
 package com.edsoncosta.WinLink.organizer;
 
-import com.edsoncosta.WinLink.generics.GenericEntity;
+import com.edsoncosta.WinLink.generics.GenericId;
 import com.edsoncosta.WinLink.raffle.Raffle;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.OneToMany;
-import lombok.Data;
+import lombok.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Data
-public class Organizer extends GenericEntity {
+@AllArgsConstructor
+@NoArgsConstructor
+public class Organizer extends GenericId {
     private String name;
     private String nif;
     private String phone;
@@ -23,5 +26,9 @@ public class Organizer extends GenericEntity {
 
     @OneToMany(mappedBy = "organizer")
     private List<Raffle> raffles;
+
+    public Organizer(UUID id) {
+        super(id);
+    }
 
 }

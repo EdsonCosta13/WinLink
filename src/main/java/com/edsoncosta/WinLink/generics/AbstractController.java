@@ -2,6 +2,7 @@ package com.edsoncosta.WinLink.generics;
 
 
 import com.edsoncosta.WinLink.generics.dto.AbstractRequestDTO;
+import com.edsoncosta.WinLink.organizer.OrganizerService;
 import com.edsoncosta.WinLink.utils.exception.generic.EntityNotFoundException;
 import com.edsoncosta.WinLink.utils.http.Response;
 import lombok.Setter;
@@ -17,7 +18,7 @@ import java.util.List;
  ******************************/
 
 @Setter
-public abstract class AbstractController<E,ID,REQUEST_DTO extends AbstractRequestDTO<E>,RESPONSE_DTO> extends Response<RESPONSE_DTO>{
+public abstract class AbstractController<E, ID, REQUEST_DTO extends AbstractRequestDTO<E>, RESPONSE_DTO> extends Response<RESPONSE_DTO> {
 
     private final AbstractService<E, ID, RESPONSE_DTO> service;
 
@@ -25,15 +26,17 @@ public abstract class AbstractController<E,ID,REQUEST_DTO extends AbstractReques
         this.service = service;
     }
 
-    @GetMapping
-    public List<RESPONSE_DTO> getAll()
-    {
-        return this.service.getAll();
+    protected AbstractService<E, ID, RESPONSE_DTO> getService() {
+        return this.service;
     }
 
     @GetMapping
-    public ResponseEntity<Response<RESPONSE_DTO>> getById(@PathVariable ID id)
-    {
+    public List<RESPONSE_DTO> getAll() {
+        return this.service.getAll();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Response<RESPONSE_DTO>> getById(@PathVariable ID id) {
         return this.service.getById(id)
                 .map(responseDto -> new Response<RESPONSE_DTO>()
                         .withData(responseDto)
@@ -57,7 +60,6 @@ public abstract class AbstractController<E,ID,REQUEST_DTO extends AbstractReques
 
     @PutMapping("/{id}")
     public ResponseEntity<Response<RESPONSE_DTO>> update(@PathVariable ID id, @RequestBody REQUEST_DTO dto) {
-
         E entity = dto.mapToEntity();
 
         try {
@@ -95,3 +97,4 @@ public abstract class AbstractController<E,ID,REQUEST_DTO extends AbstractReques
         }
     }
 }
+
